@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity
         }else if(id == R.id.nav_logout){
             Utils.setSharePreferenceValues(this, Constants.STATUS_LOGIN,Constants.LOGIN_FAIL);
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
