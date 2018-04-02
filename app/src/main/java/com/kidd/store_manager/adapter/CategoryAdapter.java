@@ -97,15 +97,22 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         TextView txt_title;
         TextView txt_author;
         TextView txt_price;
+        ImageView img_edit;
+        ImageView img_del;
         txt_title = itemView.findViewById(R.id.txt_title);
         txt_author = itemView.findViewById(R.id.txt_author);
         txt_price = itemView.findViewById(R.id.txt_price);
+        img_del = itemView.findViewById(R.id.img_del);
+        img_edit = itemView.findViewById(R.id.img_edit);
+
+        img_del.setVisibility(View.GONE);
+        img_edit.setVisibility(View.GONE);
 
         Book book = categories.get(i).getLsBook().get(i1);
         txt_title.setText(book.getTitle());
         txt_author.setText(book.getAuthor());
         DecimalFormat decimalFormat = new DecimalFormat("###,###,###");
-        txt_price.setText(decimalFormat.format(book.getPrice()));
+        txt_price.setText(decimalFormat.format(book.getPrice()) + " $");
         return itemView;
     }
 

@@ -1,5 +1,6 @@
 package com.kidd.store_manager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.kidd.store_manager.adapter.ShopFragmentAdapter;
+import com.kidd.store_manager.common.Constants;
+import com.kidd.store_manager.common.Utils;
+import com.kidd.store_manager.view.account.LoginActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -108,6 +112,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        }else if(id == R.id.nav_logout){
+            Utils.setSharePreferenceValues(this, Constants.STATUS_LOGIN,Constants.LOGIN_FAIL);
+            startActivity(new Intent(this, LoginActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

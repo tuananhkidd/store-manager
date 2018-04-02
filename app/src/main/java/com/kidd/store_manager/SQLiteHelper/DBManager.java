@@ -129,14 +129,14 @@ public class DBManager extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<Category> getAllCategory(){
+    public List<Category> getAllCategory() {
         List<Category> lsCategory = new ArrayList<>();
         String query = "select * from " + TABLE_CATEGORY;
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
-               lsCategory.add(new Category(cursor.getString(0),cursor.getString(1)));
+                lsCategory.add(new Category(cursor.getString(0), cursor.getString(1)));
             } while (cursor.moveToNext());
 
         }
@@ -159,9 +159,25 @@ public class DBManager extends SQLiteOpenHelper {
 
     }
 
-    public List<Book> getAllBook(String categoryID) {
+    public List<Book> getAllBookByTitle(String title) {
         List<Book> lsBooks = new ArrayList<>();
-        String query = "select * from " + TABLE_BOOK +" where categoryID = ?";
+        String query = "select * from " + TABLE_BOOK + " where " + TITLE + " like '%" + title + "%'";
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                lsBooks.add(new Book(cursor.getString(0), cursor.getString(1),
+                        cursor.getString(2), cursor.getString(3), cursor.getInt(4)));
+            } while (cursor.moveToNext());
+
+        }
+        return lsBooks;
+
+    }
+
+    public List<Book> getAllBookByCategotyAndTitle(String title,String categoryID) {
+        List<Book> lsBooks = new ArrayList<>();
+        String query = "select * from " + TABLE_BOOK + " where " + TITLE + " like '%" + title + "%' and "+CATEGORY_ID + " = ?";
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery(query, new String[]{categoryID});
         if (cursor.moveToFirst()) {
@@ -173,5 +189,39 @@ public class DBManager extends SQLiteOpenHelper {
         }
         return lsBooks;
 
+    }
+
+    public List<Book> getAllBook(String categoryID) {
+        List<Book> lsBooks = new ArrayList<>();
+        String query = "select * from " + TABLE_BOOK + " where categoryID = ?";
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[]{categoryID});
+        if (cursor.moveToFirst()) {
+            do {
+                lsBooks.add(new Book(cursor.getString(0), cursor.getString(1),
+                        cursor.getString(2), cursor.getString(3), cursor.getInt(4)));
+            } while (cursor.moveToNext());
+
+        }
+        return lsBooks;
+
+    }
+
+    public int deleteBook(String id) {
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(TABLE_BOOK, ID + " = ?", new String[]{id});
+    }
+
+    public int updateBook(Book book, String categoryID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ID, book.getId());
+        values.put(TITLE, book.getTitle());
+        values.put(AUTHOR, book.getAuthor());
+        values.put(PUBLISHER, book.getPublisher());
+        values.put(PRICE, book.getPrice());
+        values.put(CATEGORY_ID, categoryID);
+
+        return db.update(TABLE_BOOK, values, ID + " = ?", new String[]{book.getId()});
     }
 }
